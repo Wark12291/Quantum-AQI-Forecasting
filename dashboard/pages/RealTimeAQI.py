@@ -12,7 +12,7 @@ def run():
     st.markdown("<p class='subtitle'>Live AQI data from WAQI API</p>", unsafe_allow_html=True)
 
     CITY = "Tirupati"
-    TOKEN = "demo"
+    TOKEN = "e15cda8309930fc97e17a9e977bd4153d57c5c1a"
 
     url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
 
