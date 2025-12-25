@@ -8,15 +8,18 @@ from io import BytesIO
 
 def run():
 
-    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality – Tirupati</h2>", unsafe_allow_html=True)
     st.markdown("<p class='subtitle'>Live AQI data from WAQI API</p>", unsafe_allow_html=True)
 
-    CITY = "Tirupati"
-    TOKEN = "demo"
+    CITY = "tirupati"
+    TOKEN = "e15cda8309930fc97e17a9e977bd4153d57c5c1a"
 
     url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
 
     try:
+        # -------------------------------------------------------
+        # API CALL
+        # -------------------------------------------------------
         response = requests.get(url, timeout=10)
         data = response.json()
 
@@ -24,7 +27,6 @@ def run():
             st.error("❌ AQI data unavailable. Try again later.")
             return
 
-        # MAIN DATA
         aqi = data["data"]["aqi"]
         dominent = data["data"].get("dominentpol", "N/A")
         iaqi = data["data"].get("iaqi", {})
@@ -37,17 +39,15 @@ def run():
             </div>
         """, unsafe_allow_html=True)
 
-        st.write("")
-        st.markdown("### 🌫️ Detailed Pollutant Cards")
-        st.write("")
-
-        # POLLUTANT FULL NAMES
+        # -------------------------------------------------------
+        # POLLUTANTS
+        # -------------------------------------------------------
         POLLUTANT_NAMES = {
             "PM25": "Fine Particulate Matter (PM2.5)",
             "PM10": "Coarse Particulate Matter (PM10)",
-            "O3": "Ozone (O3)",
-            "NO2": "Nitrogen Dioxide (NO2)",
-            "SO2": "Sulfur Dioxide (SO2)",
+            "O3": "Ozone (O₃)",
+            "NO2": "Nitrogen Dioxide (NO₂)",
+            "SO2": "Sulfur Dioxide (SO₂)",
             "CO": "Carbon Monoxide (CO)",
             "T": "Temperature (T)",
             "H": "Humidity (H)",
@@ -56,7 +56,6 @@ def run():
             "W": "Wind Speed (W)"
         }
 
-        # Build pollutant list
         pollutants = []
         for pol, val in iaqi.items():
             code = pol.upper()
@@ -65,9 +64,7 @@ def run():
                 "Value": val.get("v", "N/A")
             })
 
-        # DISPLAY CARDS
         cols = st.columns(3)
-
         for i, item in enumerate(pollutants):
             html = f"""
                 <div class='card' style="margin:25px; padding:25px; border-radius:20px;">
@@ -77,38 +74,27 @@ def run():
             """
             cols[i % 3].markdown(html, unsafe_allow_html=True)
 
-        st.write("")
-
-        # ---------------------------------------------------------
-        # PREMIUM BLUE-NEON PDF
-        # ---------------------------------------------------------
-
+        # -------------------------------------------------------
+        # PDF CREATION
+        # -------------------------------------------------------
         buffer = BytesIO()
         doc = SimpleDocTemplate(buffer, pagesize=letter)
         styles = getSampleStyleSheet()
 
         neon_title = ParagraphStyle(
-            'NeonTitle',
-            parent=styles['Title'],
-            textColor=colors.HexColor("#00bfff"),
-            fontSize=28,
-            alignment=1
+            'NeonTitle', parent=styles['Title'],
+            textColor=colors.HexColor("#00bfff"), fontSize=28, alignment=1
         )
 
         section_head = ParagraphStyle(
-            'SectionHead',
-            parent=styles['Heading2'],
-            textColor=colors.HexColor("#0099ff"),
-            fontSize=18
+            'SectionHead', parent=styles['Heading2'],
+            textColor=colors.HexColor("#0099ff"), fontSize=18
         )
 
         story = []
-
-        # Title
         story.append(Paragraph("Quantum AQI Forecast – Tirupati", neon_title))
         story.append(Spacer(1, 20))
 
-        # AQI Section
         story.append(Paragraph(f"<b>Current AQI:</b> <font color='#00aaff'>{aqi}</font>", section_head))
         story.append(Paragraph(f"<b>Dominant Pollutant:</b> {dominent.upper()}", styles["Normal"]))
         story.append(Spacer(1, 15))
@@ -116,31 +102,25 @@ def run():
         story.append(Paragraph("<b>Pollutant Measurements</b>", section_head))
         story.append(Spacer(1, 10))
 
-        # Pollutant Table
         table_data = [["Pollutant", "Value"]]
         for item in pollutants:
             table_data.append([item["FullName"], str(item["Value"])])
 
         table = Table(table_data, colWidths=[260, 100])
-
         table.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#00bfff")),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
-            ("FONTSIZE", (0, 0), (-1, 0), 13),
-            ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
-
-            ("BACKGROUND", (0, 1), (-1, -1), colors.HexColor("#e6f7ff")),
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#00bfff")),
+            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#00bfff")),
+            ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+            ("BACKGROUND", (0,1), (-1,-1), colors.HexColor("#e6f7ff")),
+            ("GRID", (0,0), (-1,-1), 0.5, colors.HexColor("#00bfff"))
         ]))
 
         story.append(table)
-        story.append(Spacer(1, 30))
-
         doc.build(story)
         pdf_data = buffer.getvalue()
 
-        # PREMIUM NEON DOWNLOAD BUTTON
+        # -------------------------------------------------------
+        # CSS + DOWNLOAD BUTTON
+        # -------------------------------------------------------
         st.markdown("""
             <style>
                 .download-btn {
@@ -150,7 +130,6 @@ def run():
                     color: white !important;
                     font-size: 18px;
                     font-weight: bold;
-                    border: none;
                     cursor: pointer;
                     box-shadow: 0px 0px 12px #00bfff;
                     transition: 0.3s;
@@ -168,7 +147,7 @@ def run():
             file_name=f"{CITY}_AQI_Report.pdf",
             mime="application/pdf",
             help="Download the premium AQI Report",
-            key="premium_pdf",
+            key="premium_pdf"
         )
 
     except Exception as e:
