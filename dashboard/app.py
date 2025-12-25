@@ -47,7 +47,7 @@ with st.sidebar:
 # PAGE ROUTING
 # -----------------------------------------------------
 if selected == "Home":
-    import dashboard.pages.Home as page
+    import dashboard.pages.home as page
     page.run()
 
 elif selected == "RealTimeAQI":
