@@ -57,12 +57,19 @@ def run():
         }
 
         pollutants = []
-        for pol, val in iaqi.items():
-            code = pol.upper()
-            pollutants.append({
-                "FullName": POLLUTANT_NAMES.get(code, code),
-                "Value": val.get("v", "N/A")
-            })
+for pol, val in iaqi.items():
+    code = pol.upper()
+    value = val.get("v", "N/A")
+
+    # Round numeric values to 2 decimals
+    if isinstance(value, (int, float)):
+        value = round(value, 2)
+
+    pollutants.append({
+        "FullName": POLLUTANT_NAMES.get(code, code),
+        "Value": value
+    })
+
 
         cols = st.columns(3)
         for i, item in enumerate(pollutants):
