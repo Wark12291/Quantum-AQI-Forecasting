@@ -202,7 +202,7 @@ def run():
 
         # DOWNLOAD BUTTON
         st.download_button(
-            label="📄 Download",
+            label="Download",
             data=pdf_data,
             file_name=f"{CITY}_AQI_Report.pdf",
             mime="application/pdf",
