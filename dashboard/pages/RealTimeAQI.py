@@ -5,53 +5,59 @@ import pandas as pd
 def run():
 
     st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality – Tirupati</h2>", unsafe_allow_html=True)
-    st.markdown("<p class='subtitle'>Live AQI data from OpenAQ API</p>", unsafe_allow_html=True)
+    st.markdown("<p class='subtitle'>Live AQI data from CPCB / WAQI API</p>", unsafe_allow_html=True)
 
-    # API Endpoint
-    url = "https://api.openaq.org/v2/latest?city=Tirupati&limit=10"
+    CITY = "Tirupati"
+    TOKEN = "demo"   # Replace with your API key later
+
+    url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
 
     try:
         response = requests.get(url, timeout=10)
-
-        if response.status_code != 200:
-            st.error("❌ Could not fetch AQI data from API.")
-            return
-
         data = response.json()
 
-        if "results" not in data or len(data["results"]) == 0:
-            st.warning("⚠ No AQI sensors available in Tirupati right now.")
+        if data["status"] != "ok":
+            st.error("❌ AQI data unavailable. Try again later.")
             return
 
-        # Extract measurements
-        sensors = data["results"][0]
-        measurements = sensors["measurements"]
+        aqi = data["data"]["aqi"]
+        dominent = data["data"].get("dominentpol", "N/A")
+        iaqi = data["data"].get("iaqi", {})
 
-        df = pd.DataFrame(measurements)
+        # Display main AQI
+        st.markdown(f"""
+            <div class='card'>
+                <h2>🌬 Current AQI: <span style='color:#00eaff'>{aqi}</span></h2>
+                <p>Dominant Pollutant: <b>{dominent.upper()}</b></p>
+            </div>
+        """, unsafe_allow_html=True)
 
-        # Display dataframe
-        st.markdown("### 📊 Raw Data Table")
+        st.write("")
+        st.markdown("### 📊 Pollutant Levels")
+
+        # Extract pollutants
+        pollutant_data = []
+        for pol, val in iaqi.items():
+            pollutant_data.append([pol.upper(), val.get("v", "N/A")])
+
+        df = pd.DataFrame(pollutant_data, columns=["Pollutant", "Value"])
         st.dataframe(df, use_container_width=True)
 
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # Cards layout
-        st.markdown("### 🌬️ Pollutant Indicators")
+        # Display pollutant cards
+        st.markdown("### 🌫️ Detailed Pollutant Cards")
         col1, col2, col3 = st.columns(3)
 
-        for index, row in df.iterrows():
-
+        for i, row in df.iterrows():
             card_html = f"""
-                <div class='card' style='margin-bottom:20px;'>
-                    <h4>{row['parameter'].upper()}</h4>
-                    <p>Value: <b>{row['value']} {row['unit']}</b></p>
-                    <p>Last Updated: {row['lastUpdated']}</p>
+                <div class='card'>
+                    <h4>{row['Pollutant']}</h4>
+                    <p>Value: <b>{row['Value']}</b></p>
                 </div>
             """
 
-            if index % 3 == 0:
+            if i % 3 == 0:
                 col1.markdown(card_html, unsafe_allow_html=True)
-            elif index % 3 == 1:
+            elif i % 3 == 1:
                 col2.markdown(card_html, unsafe_allow_html=True)
             else:
                 col3.markdown(card_html, unsafe_allow_html=True)
