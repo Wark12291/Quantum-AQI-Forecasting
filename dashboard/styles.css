@@ -42,6 +42,7 @@ header, footer {visibility: hidden;}
         0px 0px 10px #000000,
         0px 0px 20px #000000,
         0px 0px 30px #000000;
+   animation: glowAnim 3s infinite alternate;
 }
 
 
