@@ -45,9 +45,9 @@ def run():
         POLLUTANT_NAMES = {
             "PM25": "Fine Particulate Matter (PM2.5)",
             "PM10": "Coarse Particulate Matter (PM10)",
-            "O3": "Ozone (O₃)",
-            "NO2": "Nitrogen Dioxide (NO₂)",
-            "SO2": "Sulfur Dioxide (SO₂)",
+            "O3": "Ozone (O3)",
+            "NO2": "Nitrogen Dioxide (NO2)",
+            "SO2": "Sulfur Dioxide (SO2)",
             "CO": "Carbon Monoxide (CO)",
             "T": "Temperature (T)",
             "H": "Humidity (H)",
