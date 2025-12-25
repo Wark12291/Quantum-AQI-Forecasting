@@ -26,7 +26,7 @@ load_css()
 # MAIN TITLE
 # -----------------------------------------------------
 st.markdown("<h1 class='title-glow'>🌌 Quantum AQI Forecasting – Neon Cyber Edition</h1>", unsafe_allow_html=True)
-st.markdown("<p class='subtitle'>Advanced AI + Quantum Dashboard for Tirupati Air Quality Monitoring</p>", unsafe_allow_html=True)
+st.markdown("<p class='subtitle'>Advanced AI + Quantum Dashboard for Air Quality Monitoring</p>", unsafe_allow_html=True)
 
 # -----------------------------------------------------
 # SIDEBAR MENU
