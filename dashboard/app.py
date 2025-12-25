@@ -46,29 +46,26 @@ with st.sidebar:
 # -----------------------------------------------------
 # PAGE ROUTING
 # -----------------------------------------------------
-import pages.Home
-import pages.RealTimeAQI
-import pages.Forecasting
-import pages.QuantumModule
-import pages.Heatmap
-import pages.AnomalyDetection
-
-
-
 if selected == "Home":
-    pages.Home.run()
+    from pages import Home as page
+    page.run()
 
 elif selected == "RealTimeAQI":
-    pages.RealTimeAQI.run()
+    from pages import RealTimeAQI as page
+    page.run()
 
 elif selected == "Forecasting":
-    pages.Forecasting.run()
+    from pages import Forecasting as page
+    page.run()
 
 elif selected == "QuantumModule":
-    pages.QuantumModule.run()
+    from pages import QuantumModule as page
+    page.run()
 
 elif selected == "Heatmap":
-    pages.Heatmap.run()
+    from pages import Heatmap as page
+    page.run()
 
 elif selected == "AnomalyDetection":
-    pages.AnomalyDetection.run()
+    from pages import AnomalyDetection as page
+    page.run()
