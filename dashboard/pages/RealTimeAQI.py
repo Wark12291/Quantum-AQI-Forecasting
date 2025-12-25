@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-import pandas as pd
+import json
 
 def run():
 
@@ -8,7 +8,7 @@ def run():
     st.markdown("<p class='subtitle'>Live AQI data from CPCB / WAQI API</p>", unsafe_allow_html=True)
 
     CITY = "Tirupati"
-    TOKEN = "e15cda8309930fc97e17a9e977bd4153d57c5c1a"   # Replace with your API key later
+    TOKEN = "demo"   # Replace using your API key
 
     url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
 
@@ -24,7 +24,7 @@ def run():
         dominent = data["data"].get("dominentpol", "N/A")
         iaqi = data["data"].get("iaqi", {})
 
-        # Display main AQI
+        # MAIN AQI CARD
         st.markdown(f"""
             <div class='card'>
                 <h2>🌬 Current AQI: <span style='color:#00eaff'>{aqi}</span></h2>
@@ -33,28 +33,24 @@ def run():
         """, unsafe_allow_html=True)
 
         st.write("")
-        st.markdown("### 📊 Pollutant Levels")
 
-        # Extract pollutants
-        pollutant_data = []
-        for pol, val in iaqi.items():
-            pollutant_data.append([pol.upper(), val.get("v", "N/A")])
-
-        df = pd.DataFrame(pollutant_data, columns=["Pollutant", "Value"])
-        st.dataframe(df, use_container_width=True)
-
-        # Display pollutant cards
+        # POLLUTANT CARDS ONLY — NO TABLE
         st.markdown("### 🌫️ Detailed Pollutant Cards")
+        st.write("")
+
+        pollutants = []
+        for pol, val in iaqi.items():
+            pollutants.append({"Pollutant": pol.upper(), "Value": val.get("v", "N/A")})
+
         col1, col2, col3 = st.columns(3)
 
-        for i, row in df.iterrows():
+        for i, row in enumerate(pollutants):
             card_html = f"""
                 <div class='card'>
                     <h4>{row['Pollutant']}</h4>
                     <p>Value: <b>{row['Value']}</b></p>
                 </div>
             """
-
             if i % 3 == 0:
                 col1.markdown(card_html, unsafe_allow_html=True)
             elif i % 3 == 1:
@@ -62,5 +58,22 @@ def run():
             else:
                 col3.markdown(card_html, unsafe_allow_html=True)
 
+        st.write("")
+
+        # DOWNLOAD REPORT BUTTON
+        report_json = json.dumps({
+            "city": CITY,
+            "aqi": aqi,
+            "dominant": dominent,
+            "pollutants": pollutants
+        }, indent=4)
+
+        st.download_button(
+            label="📥 Download AQI Report (JSON)",
+            data=report_json,
+            file_name=f"{CITY}_aqi_report.json",
+            mime="application/json"
+        )
+
     except Exception as e:
-        st.error(f"❌ Error fetching data: {str(e)}")
+        st.error(f"❌ Error fetching AQI: {str(e)}")
