@@ -1,1 +1,144 @@
-body { background: black; color: #00ffff; font-family: Arial; }
+/* -----------------------------------------------------
+   GLOBAL BACKGROUND
+------------------------------------------------------ */
+body {
+    background: #000000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Hide Streamlit default header and footer */
+header, footer {visibility: hidden;}
+
+
+/* -----------------------------------------------------
+   TITLE + SUBTITLE GLOW EFFECT
+------------------------------------------------------ */
+.title-glow {
+    font-size: 48px;
+    text-align: center;
+    color: #00eaff;
+    text-shadow:
+        0px 0px 10px #00eaff,
+        0px 0px 20px #00bfff,
+        0px 0px 40px #0066ff,
+        0px 0px 60px #004dff;
+    animation: glowAnim 3s infinite alternate;
+}
+
+@keyframes glowAnim {
+    0% { text-shadow: 0 0 20px #00bfff; }
+    100% { text-shadow: 0 0 40px #00eaff; }
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 20px;
+    color: #b3f2ff;
+    margin-top: -10px;
+    opacity: 0.9;
+}
+
+
+/* -----------------------------------------------------
+   SIDEBAR CUSTOMIZATION
+------------------------------------------------------ */
+.css-1d391kg {
+    background-color: #000000 !important;
+    color: #00eaff !important;
+}
+
+.sidebar .sidebar-content {
+    background: #000000 !important;
+}
+
+
+/* -----------------------------------------------------
+   CARD UI (Neon Glow Panels)
+------------------------------------------------------ */
+.card {
+    background: rgba(0, 128, 255, 0.08);
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    box-shadow:
+        0px 0px 10px rgba(0, 200, 255, 0.4),
+        0px 0px 20px rgba(0, 128, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transition: 0.35s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow:
+        0px 0px 25px rgba(0, 255, 255, 0.7),
+        0px 0px 40px rgba(0, 128, 255, 0.5);
+}
+
+
+/* -----------------------------------------------------
+   CUSTOM BUTTONS
+------------------------------------------------------ */
+.stButton>button {
+    background: linear-gradient(90deg, #0099ff, #00eaff);
+    border-radius: 10px;
+    color: #000;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0 0 10px #00eaff;
+    transition: 0.3s ease-in-out;
+}
+
+.stButton>button:hover {
+    background: linear-gradient(90deg, #00eaff, #0099ff);
+    box-shadow: 0 0 18px #00eaff;
+    transform: scale(1.05);
+}
+
+
+/* -----------------------------------------------------
+   DATAFRAME TABLES
+------------------------------------------------------ */
+.dataframe {
+    border-radius: 12px;
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 15px #00bfff;
+}
+
+
+/* -----------------------------------------------------
+   INPUT ELEMENTS (SelectBox, TextInput)
+------------------------------------------------------ */
+.stSelectbox div, .stTextInput input {
+    background: rgba(0, 128, 255, 0.1) !important;
+    border: 1px solid #00eaff !important;
+    border-radius: 10px !important;
+    color: #00eaff !important;
+}
+
+
+/* -----------------------------------------------------
+   PLOTLY CHARTS BORDER GLOW
+------------------------------------------------------ */
+.stPlotlyChart {
+    border-radius: 15px;
+    box-shadow: 0 0 15px #00bfff;
+}
+
+
+/* -----------------------------------------------------
+   SCROLLBAR STYLE
+------------------------------------------------------ */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #00111a;
+}
+::-webkit-scrollbar-thumb {
+    background: #00bfff;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #00eaff;
+}
