@@ -39,17 +39,40 @@ def run():
         st.write("<br>", unsafe_allow_html=True)
 
         # POLLUTANT CARDS WITH BETTER SPACING
+        # Pollutant Full Names Mapping
+        POLLUTANT_NAMES = {
+            "PM25": "Fine Particulate Matter (PM2.5)",
+            "PM10": "Coarse Particulate Matter (PM10)",
+            "O3": "Ozone (O₃)",
+            "NO2": "Nitrogen Dioxide (NO₂)",
+            "SO2": "Sulfur Dioxide (SO₂)",
+            "CO": "Carbon Monoxide (CO)",
+            "T": "Temperature (T)",
+            "H": "Humidity (H)",
+            "P": "Air Pressure (P)",
+            "DEW": "Dew Point (DEW)",
+            "W": "Wind Speed (W)"
+        }
+
+        # Converting pollutants list
         pollutants = []
         for pol, val in iaqi.items():
-            pollutants.append({"Pollutant": pol.upper(), "Value": val.get("v", "N/A")})
+            code = pol.upper()
+            full_name = POLLUTANT_NAMES.get(code, code)
+            pollutants.append({
+                "FullName": full_name,
+                "Code": code,
+                "Value": val.get("v", "N/A")
+            })
 
+        # Display cards with full names
         col1, col2, col3 = st.columns(3)
 
         for i, row in enumerate(pollutants):
 
             card_html = f"""
                 <div class='card' style='margin:15px; padding:20px; border-radius:15px;'>
-                    <h4>{row['Pollutant']}</h4>
+                    <h4>{row['FullName']}</h4>
                     <p>Value: <b>{row['Value']}</b></p>
                 </div>
             """
@@ -60,9 +83,6 @@ def run():
                 col2.markdown(card_html, unsafe_allow_html=True)
             else:
                 col3.markdown(card_html, unsafe_allow_html=True)
-
-        st.write("<br><br>", unsafe_allow_html=True)
-
         # -----------------------------------------------------
         # ENHANCED PDF DOWNLOAD
         # -----------------------------------------------------
