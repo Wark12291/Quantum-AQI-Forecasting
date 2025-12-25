@@ -44,28 +44,28 @@ with st.sidebar:
     )
 
 # -----------------------------------------------------
-# PAGE ROUTING
+# PAGE ROUTING (FIXED)
 # -----------------------------------------------------
 if selected == "Home":
-    from pages import Home as page
-    page.run()
+    from dashboard.pages.Home import run
+    run()
 
 elif selected == "RealTimeAQI":
-    from pages import RealTimeAQI as page
-    page.run()
+    from dashboard.pages.RealTimeAQI import run
+    run()
 
 elif selected == "Forecasting":
-    from pages import Forecasting as page
-    page.run()
+    from dashboard.pages.Forecasting import run
+    run()
 
 elif selected == "QuantumModule":
-    from pages import QuantumModule as page
-    page.run()
+    from dashboard.pages.QuantumModule import run
+    run()
 
 elif selected == "Heatmap":
-    from pages import Heatmap as page
-    page.run()
+    from dashboard.pages.Heatmap import run
+    run()
 
 elif selected == "AnomalyDetection":
-    from pages import AnomalyDetection as page
-    page.run()
+    from dashboard.pages.AnomalyDetection import run
+    run()
