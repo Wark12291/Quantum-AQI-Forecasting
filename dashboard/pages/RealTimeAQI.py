@@ -56,14 +56,38 @@ def run():
             "W": "Wind Speed (W)"
         }
 
-        # Build pollutant list
-        pollutants = []
-        for pol, val in iaqi.items():
-            code = pol.upper()
-            pollutants.append({
-                "FullName": POLLUTANT_NAMES.get(code, code),
-                "Value": val.get("v", "N/A")
-            })
+        # Build pollutant list with units
+UNITS = {
+    "PM25": "µg/m³",
+    "PM10": "µg/m³",
+    "O3": "ppb",
+    "NO2": "ppb",
+    "SO2": "ppb",
+    "CO": "ppm",
+    "T": "°C",
+    "H": "%",
+    "P": "hPa",
+    "DEW": "°C",
+    "W": "m/s"
+}
+
+pollutants = []
+for pol, val in iaqi.items():
+    code = pol.upper()
+
+    value = val.get("v", "N/A")
+
+    # Format decimals to 2 places
+    if isinstance(value, float):
+        value = f"{value:.2f}"
+
+    value = f"{value} {UNITS.get(code, '')}".strip()
+
+    pollutants.append({
+        "FullName": POLLUTANT_NAMES.get(code, code),
+        "Value": value
+    })
+
 
         # DISPLAY CARDS
         cols = st.columns(3)
