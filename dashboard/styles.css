@@ -33,15 +33,15 @@ header, footer {visibility: hidden;}
 .subtitle {
     text-align: center;
     font-size: 20px;
-    color: #b3f2ff; 
+    color: #00bfff; 
     margin-top: -10px;
     opacity: 1;
     
    
     text-shadow:
-        0px 0px 10px #000000,
-        0px 0px 20px #FFFFFF,
-        0px 0px 30px #FFFF00;
+      /*  0px 0px 10px #000000,
+        0px 0px 20px #FFFFFF, */
+        0px 0px 10px #FFFF00;
 }
 
 
