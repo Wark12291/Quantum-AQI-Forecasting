@@ -39,9 +39,9 @@ header, footer {visibility: hidden;}
     
    
     text-shadow:
-        0px 0px 10px #0000FF,
+        0px 0px 10px #000000,
         0px 0px 20px #FFFFFF,
-        0px 0px 30px #00eaff;
+        0px 0px 30px #FFFF00;
 }
 
 
