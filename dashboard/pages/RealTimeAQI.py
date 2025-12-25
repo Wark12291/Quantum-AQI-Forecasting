@@ -107,7 +107,7 @@ def run():
         pdf_data = buffer.getvalue()
 
         st.download_button(
-            label="📄 Download",
+            label=𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝",
             data=pdf_data,
             file_name=f"{CITY}_AQI_Report.pdf",
             mime="application/pdf",
