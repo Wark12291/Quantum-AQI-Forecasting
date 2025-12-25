@@ -17,6 +17,87 @@ def run():
     url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
 
     try:
+        response = requests.get(url, timeout=10)
+        data = response.json()
+
+        if data["status"] != "ok":
+            st.error("❌ AQI data unavailable. Try again later.")
+            return
+
+        # MAIN DATA
+        aqi = data["data"]["aqi"]
+        dominent = data["data"].get("dominentpol", "N/A")
+        iaqi = data["data"].get("iaqi", {})
+
+        # MAIN AQI CARD
+        st.markdown(f"""
+            <div class='card'>
+                <h2>🌬 Current AQI: <span style='color:#00eaff'>{aqi}</span></h2>
+                <p>Dominant Pollutant: <b>{dominent.upper()}</b></p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        st.write("")
+        st.markdown("### 🌫️ Detailed Pollutant Cards")
+        st.write("")
+
+        # POLLUTANT FULL NAMES
+        POLLUTANT_NAMES = {
+            "PM25": "Fine Particulate Matter (PM2.5)",
+            "PM10": "Coarse Particulate Matter (PM10)",
+            "O3": "Ozone (O₃)",
+            "NO2": "Nitrogen Dioxide (NO₂)",
+            "SO2": "Sulfur Dioxide (SO₂)",
+            "CO": "Carbon Monoxide (CO)",
+            "T": "Temperature (T)",
+            "H": "Humidity (H)",
+            "P": "Air Pressure (P)",
+            "DEW": "Dew Point (DEW)",
+            "W": "Wind Speed (W)"
+        }
+
+        # Build pollutant list
+        pollutants = []
+        for pol, val in iaqi.items():
+            code = pol.upper()
+            pollutants.append({
+                "FullName": POLLUTANT_NAMES.get(code, code),
+                "Value": val.get("v", "N/A")
+            })
+
+        # DISPLAY CARDS
+        cols = st.columns(3)
+
+        for i, item in enumerate(pollutants):
+            html = f"""
+                <div class='card' style="margin:25px; padding:25px; border-radius:20px;">
+                    <h4 style='font-size:20px;'>{item['FullName']}</h4>
+                    <p style='font-size:17px;'>Value: <b>{item['Value']}</b></p>
+                </div>
+            """
+            cols[i % 3].markdown(html, unsafe_allow_html=True)
+
+        st.write("")
+
+        import streamlit as st
+import requests
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from io import BytesIO
+
+def run():
+
+    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality – Tirupati</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='subtitle'>Live AQI data from WAQI API</p>", unsafe_allow_html=True)
+
+    CITY = "tirupati"
+    TOKEN = "e15cda8309930fc97e17a9e977bd4153d57c5c1a"
+
+    url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
+
+    try:
         # -------------------------------------------------------
         # API CALL
         # -------------------------------------------------------
@@ -57,19 +138,12 @@ def run():
         }
 
         pollutants = []
-for pol, val in iaqi.items():
-    code = pol.upper()
-    value = val.get("v", "N/A")
-
-    # Round numeric values to 2 decimals
-    if isinstance(value, (int, float)):
-        value = round(value, 2)
-
-    pollutants.append({
-        "FullName": POLLUTANT_NAMES.get(code, code),
-        "Value": value
-    })
-
+        for pol, val in iaqi.items():
+            code = pol.upper()
+            pollutants.append({
+                "FullName": POLLUTANT_NAMES.get(code, code),
+                "Value": val.get("v", "N/A")
+            })
 
         cols = st.columns(3)
         for i, item in enumerate(pollutants):
@@ -219,3 +293,4 @@ for pol, val in iaqi.items():
 
     except Exception as e:
         st.error(f"❌ Error fetching AQI: {str(e)}")
+
