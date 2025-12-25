@@ -1,154 +1,144 @@
-import streamlit as st
-import requests
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from io import BytesIO
+/* -----------------------------------------------------
+   GLOBAL BACKGROUND
+------------------------------------------------------ */
+body {
+    background: #000000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-def run():
+/* Hide Streamlit default header and footer */
+header, footer {visibility: hidden;}
 
-    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality – Tirupati</h2>", unsafe_allow_html=True)
-    st.markdown("<p class='subtitle'>Live AQI data from WAQI API</p>", unsafe_allow_html=True)
 
-    CITY = "tirupati"
-    TOKEN = "demo"
+/* -----------------------------------------------------
+   TITLE + SUBTITLE GLOW EFFECT
+------------------------------------------------------ */
+.title-glow {
+    font-size: 48px;
+    text-align: center;
+    color: #00eaff;
+    text-shadow:
+        0px 0px 10px #00eaff,
+        0px 0px 20px #00bfff,
+        0px 0px 40px #0066ff,
+        0px 0px 60px #004dff;
+    animation: glowAnim 3s infinite alternate;
+}
 
-    url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
+@keyframes glowAnim {
+    0% { text-shadow: 0 0 20px #00bfff; }
+    100% { text-shadow: 0 0 40px #00eaff; }
+}
 
-    try:
-        # -------------------------------------------------------
-        # API CALL
-        # -------------------------------------------------------
-        response = requests.get(url, timeout=10)
-        data = response.json()
+.subtitle {
+    text-align: center;
+    font-size: 20px;
+    color: #b3f2ff;
+    margin-top: -10px;
+    opacity: 0.9;
+}
 
-        if data["status"] != "ok":
-            st.error("❌ AQI data unavailable. Try again later.")
-            return
 
-        aqi = data["data"]["aqi"]
-        dominent = data["data"].get("dominentpol", "N/A")
-        iaqi = data["data"].get("iaqi", {})
+/* -----------------------------------------------------
+   SIDEBAR CUSTOMIZATION
+------------------------------------------------------ */
+.css-1d391kg {
+    background-color: #000000 !important;
+    color: #00eaff !important;
+}
 
-        # MAIN AQI CARD
-        st.markdown(f"""
-            <div class='card'>
-                <h2>🌬 Current AQI: <span style='color:#00eaff'>{aqi}</span></h2>
-                <p>Dominant Pollutant: <b>{dominent.upper()}</b></p>
-            </div>
-        """, unsafe_allow_html=True)
+.sidebar .sidebar-content {
+    background: #000000 !important;
+}
 
-        # -------------------------------------------------------
-        # POLLUTANTS
-        # -------------------------------------------------------
-        POLLUTANT_NAMES = {
-            "PM25": "Fine Particulate Matter (PM2.5)",
-            "PM10": "Coarse Particulate Matter (PM10)",
-            "O3": "Ozone (O₃)",
-            "NO2": "Nitrogen Dioxide (NO₂)",
-            "SO2": "Sulfur Dioxide (SO₂)",
-            "CO": "Carbon Monoxide (CO)",
-            "T": "Temperature (T)",
-            "H": "Humidity (H)",
-            "P": "Air Pressure (P)",
-            "DEW": "Dew Point (DEW)",
-            "W": "Wind Speed (W)"
-        }
 
-        pollutants = []
-        for pol, val in iaqi.items():
-            code = pol.upper()
-            pollutants.append({
-                "FullName": POLLUTANT_NAMES.get(code, code),
-                "Value": val.get("v", "N/A")
-            })
+/* -----------------------------------------------------
+   CARD UI (Neon Glow Panels)
+------------------------------------------------------ */
+.card {
+    background: rgba(0, 128, 255, 0.08);
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    box-shadow:
+        0px 0px 10px rgba(0, 200, 255, 0.4),
+        0px 0px 20px rgba(0, 128, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transition: 0.35s ease-in-out;
+}
 
-        cols = st.columns(3)
-        for i, item in enumerate(pollutants):
-            html = f"""
-                <div class='card' style="margin:25px; padding:25px; border-radius:20px;">
-                    <h4 style='font-size:20px;'>{item['FullName']}</h4>
-                    <p style='font-size:17px;'>Value: <b>{item['Value']}</b></p>
-                </div>
-            """
-            cols[i % 3].markdown(html, unsafe_allow_html=True)
+.card:hover {
+    transform: scale(1.03);
+    box-shadow:
+        0px 0px 25px rgba(0, 255, 255, 0.7),
+        0px 0px 40px rgba(0, 128, 255, 0.5);
+}
 
-        # -------------------------------------------------------
-        # PDF CREATION
-        # -------------------------------------------------------
-        buffer = BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=letter)
-        styles = getSampleStyleSheet()
 
-        neon_title = ParagraphStyle(
-            'NeonTitle', parent=styles['Title'],
-            textColor=colors.HexColor("#00bfff"), fontSize=28, alignment=1
-        )
+/* -----------------------------------------------------
+   CUSTOM BUTTONS
+------------------------------------------------------ */
+.stButton>button {
+    background: linear-gradient(90deg, #0099ff, #00eaff);
+    border-radius: 10px;
+    color: #000;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0 0 10px #00eaff;
+    transition: 0.3s ease-in-out;
+}
 
-        section_head = ParagraphStyle(
-            'SectionHead', parent=styles['Heading2'],
-            textColor=colors.HexColor("#0099ff"), fontSize=18
-        )
+.stButton>button:hover {
+    background: linear-gradient(90deg, #00eaff, #0099ff);
+    box-shadow: 0 0 18px #00eaff;
+    transform: scale(1.05);
+}
 
-        story = []
-        story.append(Paragraph("Quantum AQI Forecast – Tirupati", neon_title))
-        story.append(Spacer(1, 20))
 
-        story.append(Paragraph(f"<b>Current AQI:</b> <font color='#00aaff'>{aqi}</font>", section_head))
-        story.append(Paragraph(f"<b>Dominant Pollutant:</b> {dominent.upper()}", styles["Normal"]))
-        story.append(Spacer(1, 15))
+/* -----------------------------------------------------
+   DATAFRAME TABLES
+------------------------------------------------------ */
+.dataframe {
+    border-radius: 12px;
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 15px #00bfff;
+}
 
-        story.append(Paragraph("<b>Pollutant Measurements</b>", section_head))
-        story.append(Spacer(1, 10))
 
-        table_data = [["Pollutant", "Value"]]
-        for item in pollutants:
-            table_data.append([item["FullName"], str(item["Value"])])
+/* -----------------------------------------------------
+   INPUT ELEMENTS (SelectBox, TextInput)
+------------------------------------------------------ */
+.stSelectbox div, .stTextInput input {
+    background: rgba(0, 128, 255, 0.1) !important;
+    border: 1px solid #00eaff !important;
+    border-radius: 10px !important;
+    color: #00eaff !important;
+}
 
-        table = Table(table_data, colWidths=[260, 100])
-        table.setStyle(TableStyle([
-            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#00bfff")),
-            ("TEXTCOLOR", (0,0), (-1,0), colors.white),
-            ("BACKGROUND", (0,1), (-1,-1), colors.HexColor("#e6f7ff")),
-            ("GRID", (0,0), (-1,-1), 0.5, colors.HexColor("#00bfff"))
-        ]))
 
-        story.append(table)
-        doc.build(story)
-        pdf_data = buffer.getvalue()
+/* -----------------------------------------------------
+   PLOTLY CHARTS BORDER GLOW
+------------------------------------------------------ */
+.stPlotlyChart {
+    border-radius: 15px;
+    box-shadow: 0 0 15px #00bfff;
+}
 
-        # -------------------------------------------------------
-        # CSS + DOWNLOAD BUTTON
-        # -------------------------------------------------------
-        st.markdown("""
-            <style>
-                .download-btn {
-                    background: linear-gradient(90deg, #00eaff, #008cff);
-                    padding: 12px 25px;
-                    border-radius: 12px;
-                    color: white !important;
-                    font-size: 18px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    box-shadow: 0px 0px 12px #00bfff;
-                    transition: 0.3s;
-                }
-                .download-btn:hover {
-                    box-shadow: 0px 0px 25px #00eaff;
-                    transform: scale(1.03);
-                }
-            </style>
-        """, unsafe_allow_html=True)
 
-        st.download_button(
-            label="📄 Download",
-            data=pdf_data,
-            file_name=f"{CITY}_AQI_Report.pdf",
-            mime="application/pdf",
-            help="Download the premium AQI Report",
-            key="premium_pdf"
-        )
-
-    except Exception as e:
-        st.error(f"❌ Error fetching AQI: {str(e)}")
+/* -----------------------------------------------------
+   SCROLLBAR STYLE
+------------------------------------------------------ */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #00111a;
+}
+::-webkit-scrollbar-thumb {
+    background: #00bfff;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #00eaff;
+}
