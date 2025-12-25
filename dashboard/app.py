@@ -1,18 +1,13 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-# -----------------------------------------------------
-# PAGE CONFIG FIRST
-# -----------------------------------------------------
 st.set_page_config(
     page_title="Quantum AQI Forecasting – Neon Cyber Edition",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# -----------------------------------------------------
-# LOAD CSS
-# -----------------------------------------------------
+# Load CSS
 def load_css():
     try:
         with open("dashboard/styles.css") as f:
@@ -22,25 +17,21 @@ def load_css():
 
 load_css()
 
-# -----------------------------------------------------
-# IMPORT PAGES (CORRECT FORMAT)
-# -----------------------------------------------------
-import pages.Home as Home
-import pages.RealTimeAQI as RealTimeAQI
-import pages.Forecasting as Forecasting
-import pages.QuantumModule as QuantumModule
-import pages.Heatmap as Heatmap
-import pages.AnomalyDetection as AnomalyDetection
+# -------------------------------
+# CORRECT IMPORTS (VERY IMPORTANT)
+# -------------------------------
+from pages import Home
+from pages import RealTimeAQI
+from pages import Forecasting
+from pages import QuantumModule
+from pages import Heatmap
+from pages import AnomalyDetection
 
-# -----------------------------------------------------
-# HEADER
-# -----------------------------------------------------
+# Header
 st.markdown("<h1 class='title-glow'>🌌 Quantum AQI Forecasting – Neon Cyber Edition</h1>", unsafe_allow_html=True)
 st.markdown("<p class='subtitle'>AI + Quantum Hybrid Dashboard</p>", unsafe_allow_html=True)
 
-# -----------------------------------------------------
-# SIDEBAR MENU
-# -----------------------------------------------------
+# Sidebar menu
 with st.sidebar:
     selected = option_menu(
         "⚡ Menu",
@@ -49,9 +40,7 @@ with st.sidebar:
         default_index=0,
     )
 
-# -----------------------------------------------------
-# ROUTING
-# -----------------------------------------------------
+# Routing
 if selected == "Home":
     Home.run()
 
