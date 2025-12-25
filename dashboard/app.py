@@ -1,10 +1,8 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-import os
-import sys
 
 # -----------------------------------------------------
-# 1. PAGE CONFIG (MUST BE FIRST)
+# PAGE CONFIG MUST COME FIRST
 # -----------------------------------------------------
 st.set_page_config(
     page_title="Quantum AQI Forecasting – Neon Cyber Edition",
@@ -13,39 +11,25 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------
-# 2. PATH CONFIGURATION (The "No-Rename" Fix)
-# -----------------------------------------------------
-# This adds the 'pages' directory to Python's search path
-# so you can import 'Home' instead of 'pages.Home'
-current_dir = os.path.dirname(os.path.abspath(__file__))
-pages_path = os.path.join(current_dir, "pages")
-if pages_path not in sys.path:
-    sys.path.append(pages_path)
-
-# -----------------------------------------------------
-# 3. LOAD CUSTOM CSS
+# LOAD CUSTOM CSS (AFTER page_config)
 # -----------------------------------------------------
 def load_css():
     try:
         with open("dashboard/styles.css") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-    except FileNotFoundError:
-        try:
-            with open("styles.css") as f:
-                st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-        except:
-            pass # Silent failure for CSS
+    except:
+        st.error("❌ Could not load styles.css")
 
 load_css()
 
 # -----------------------------------------------------
-# 4. MAIN TITLE
+# MAIN TITLE
 # -----------------------------------------------------
 st.markdown("<h1 class='title-glow'>🌌 Quantum AQI Forecasting – Neon Cyber Edition</h1>", unsafe_allow_html=True)
 st.markdown("<p class='subtitle'>Advanced AI + Quantum Dashboard for Air Quality Monitoring</p>", unsafe_allow_html=True)
 
 # -----------------------------------------------------
-# 5. SIDEBAR MENU
+# SIDEBAR MENU
 # -----------------------------------------------------
 with st.sidebar:
     selected = option_menu(
@@ -60,29 +44,28 @@ with st.sidebar:
     )
 
 # -----------------------------------------------------
-# 6. PAGE ROUTING
+# PAGE ROUTING
 # -----------------------------------------------------
-# We import directly by file name because we added 'pages' to the path above
 if selected == "Home":
-    import Home
-    Home.run()
+    from pages import Home as page
+    page.run()
 
 elif selected == "RealTimeAQI":
-    import RealTimeAQI
-    RealTimeAQI.run()
+    from pages import RealTimeAQI as page
+    page.run()
 
 elif selected == "Forecasting":
-    import Forecasting
-    Forecasting.run()
+    from pages import Forecasting as page
+    page.run()
 
 elif selected == "QuantumModule":
-    import QuantumModule
-    QuantumModule.run()
+    from pages import QuantumModule as page
+    page.run()
 
 elif selected == "Heatmap":
-    import Heatmap
-    Heatmap.run()
+    from pages import Heatmap as page
+    page.run()
 
 elif selected == "AnomalyDetection":
-    import AnomalyDetection
-    AnomalyDetection.run()
+    from pages import AnomalyDetection as page
+    page.run()
