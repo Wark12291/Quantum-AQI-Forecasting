@@ -8,7 +8,7 @@ from io import BytesIO
 
 def run():
 
-    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality – Tirupati</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality</h2>", unsafe_allow_html=True)
     st.markdown("<p class='subtitle'>Live AQI data from WAQI API</p>", unsafe_allow_html=True)
 
     CITY = "Tirupati"
