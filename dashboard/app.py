@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 
 # -----------------------------------------------------
-# PAGE CONFIG MUST COME FIRST
+# PAGE CONFIG
 # -----------------------------------------------------
 st.set_page_config(
     page_title="Quantum AQI Forecasting – Neon Cyber Edition",
@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------
-# LOAD CUSTOM CSS (AFTER page_config)
+# LOAD CUSTOM CSS
 # -----------------------------------------------------
 def load_css():
     try:
@@ -44,28 +44,28 @@ with st.sidebar:
     )
 
 # -----------------------------------------------------
-# PAGE ROUTING
+# PAGE ROUTING (CORRECT IMPORTS)
 # -----------------------------------------------------
 if selected == "Home":
-    from pages import Home as page
+    import dashboard.pages.Home as page
     page.run()
 
 elif selected == "RealTimeAQI":
-    from pages import RealTimeAQI as page
+    import dashboard.pages.RealTimeAQI as page
     page.run()
 
 elif selected == "Forecasting":
-    from pages import Forecasting as page
+    import dashboard.pages.Forecasting as page
     page.run()
 
 elif selected == "QuantumModule":
-    from pages import QuantumModule as page
+    import dashboard.pages.QuantumModule as page
     page.run()
 
 elif selected == "Heatmap":
-    from pages import Heatmap as page
+    import dashboard.pages.Heatmap as page
     page.run()
 
 elif selected == "AnomalyDetection":
-    from pages import AnomalyDetection as page
+    import dashboard.pages.AnomalyDetection as page
     page.run()
