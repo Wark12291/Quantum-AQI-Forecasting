@@ -182,7 +182,7 @@ def run():
         st.markdown("""
             <style>
                 .download-btn {
-                    background: linear-gradient(90deg, #00eaff, #008cff);
+                    background: linear-gradient(90deg, #87CEEB, #008cff);
                     padding: 12px 25px;
                     border-radius: 12px;
                     color: white !important;
