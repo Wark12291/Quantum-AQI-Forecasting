@@ -117,63 +117,98 @@ def run():
         story.append(table)
         doc.build(story)
         pdf_data = buffer.getvalue()
- # -------------------------------------------------------
-# PREMIUM NEON DOWNLOAD BUTTON (NO class_name)
-# -------------------------------------------------------
+# ---------------------------------------------------------
+        # PREMIUM BLUE-NEON PDF
+        # ---------------------------------------------------------
 
-st.markdown("""
-<style>
+        buffer = BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        styles = getSampleStyleSheet()
 
-.download-btn-container {
-    margin-top: 25px;
-    margin-bottom: 25px;
-    text-align: left;
-}
+        neon_title = ParagraphStyle(
+            'NeonTitle',
+            parent=styles['Title'],
+            textColor=colors.HexColor("#00bfff"),
+            fontSize=28,
+            alignment=1
+        )
 
-/* Target the Streamlit download button */
-.stDownloadButton > button {
-    background: linear-gradient(90deg, #00eaff, #0066ff);
-    color: white !important;
-    padding: 14px 32px;
-    font-size: 20px;
-    font-weight: 700;
-    border-radius: 14px;
-    border: none;
-    cursor: pointer;
+        section_head = ParagraphStyle(
+            'SectionHead',
+            parent=styles['Heading2'],
+            textColor=colors.HexColor("#0099ff"),
+            fontSize=18
+        )
 
-    box-shadow: 0px 0px 18px #00c8ff, 
-                0px 0px 40px rgba(0, 200, 255, 0.5);
+        story = []
 
-    transition: all 0.25s ease-in-out;
-}
+        # Title
+        story.append(Paragraph("Quantum AQI Forecast – Tirupati", neon_title))
+        story.append(Spacer(1, 20))
 
-.stDownloadButton > button:hover {
-    transform: scale(1.06);
-    box-shadow: 0px 0px 28px #00eaff,
-                0px 0px 55px rgba(0, 200, 255, 0.8);
-}
+        # AQI Section
+        story.append(Paragraph(f"<b>Current AQI:</b> <font color='#00aaff'>{aqi}</font>", section_head))
+        story.append(Paragraph(f"<b>Dominant Pollutant:</b> {dominent.upper()}", styles["Normal"]))
+        story.append(Spacer(1, 15))
 
-.stDownloadButton > button:active {
-    transform: scale(0.97);
-    box-shadow: 0px 0px 12px #008cff;
-}
+        story.append(Paragraph("<b>Pollutant Measurements</b>", section_head))
+        story.append(Spacer(1, 10))
 
-</style>
-""", unsafe_allow_html=True)
+        # Pollutant Table
+        table_data = [["Pollutant", "Value"]]
+        for item in pollutants:
+            table_data.append([item["FullName"], str(item["Value"])])
 
-st.markdown("<div class='download-btn-container'>", unsafe_allow_html=True)
+        table = Table(table_data, colWidths=[260, 100])
 
-st.download_button(
-    label="📄 Download",
-    data=pdf_data,
-    file_name=f"{CITY}_AQI_Report.pdf",
-    mime="application/pdf",
-    key="premium_pdf",
-    help="Download your premium AQI report"
-)
+        table.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#00bfff")),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+            ("FONTSIZE", (0, 0), (-1, 0), 13),
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
 
-st.markdown("</div>", unsafe_allow_html=True)
+            ("BACKGROUND", (0, 1), (-1, -1), colors.HexColor("#e6f7ff")),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#00bfff")),
+        ]))
 
+        story.append(table)
+        story.append(Spacer(1, 30))
+
+        doc.build(story)
+        pdf_data = buffer.getvalue()
+
+        # PREMIUM NEON DOWNLOAD BUTTON CSS
+        st.markdown("""
+            <style>
+                .download-btn {
+                    background: linear-gradient(90deg, #00eaff, #008cff);
+                    padding: 12px 25px;
+                    border-radius: 12px;
+                    color: white !important;
+                    font-size: 18px;
+                    font-weight: bold;
+                    border: none;
+                    cursor: pointer;
+                    box-shadow: 0px 0px 12px #00bfff;
+                    transition: 0.3s;
+                }
+                .download-btn:hover {
+                    box-shadow: 0px 0px 25px #00eaff;
+                    transform: scale(1.03);
+                }
+            </style>
+        """, unsafe_allow_html=True)
+
+        # DOWNLOAD BUTTON
+        st.download_button(
+            label="📄 Download",
+            data=pdf_data,
+            file_name=f"{CITY}_AQI_Report.pdf",
+            mime="application/pdf",
+            help="Download the premium AQI Report",
+            key="premium_pdf"
+        )
 
     except Exception as e:
         st.error(f"❌ Error fetching AQI: {str(e)}")
