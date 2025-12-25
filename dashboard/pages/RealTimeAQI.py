@@ -45,9 +45,9 @@ def run():
         POLLUTANT_NAMES = {
             "PM25": "Fine Particulate Matter (PM2.5)",
             "PM10": "Coarse Particulate Matter (PM10)",
-            "O3": "Ozone (O3)",
-            "NO2": "Nitrogen Dioxide (NO2)",
-            "SO2": "Sulfur Dioxide (SO2)",
+            "O3": "Ozone (O₃)",
+            "NO2": "Nitrogen Dioxide (NO₂)",
+            "SO2": "Sulfur Dioxide (SO₂)",
             "CO": "Carbon Monoxide (CO)",
             "T": "Temperature (T)",
             "H": "Humidity (H)",
@@ -56,24 +56,14 @@ def run():
             "W": "Wind Speed (W)"
         }
 
-       for pol, val in iaqi.items():
-    code = pol.upper()
-    pollutants.append({
-        "FullName": POLLUTANT_NAMES.get(code, code),
-        "Value": val.get("v", "N/A")
-    })
-
-    # Format decimals to 2 places
-    if isinstance(value, float):
-        value = f"{value:.2f}"
-
-    value = f"{value} {UNITS.get(code, '')}".strip()
-
-    pollutants.append({
-        "FullName": POLLUTANT_NAMES.get(code, code),
-        "Value": value
-    })
-
+        # Build pollutant list
+        pollutants = []
+        for pol, val in iaqi.items():
+            code = pol.upper()
+            pollutants.append({
+                "FullName": POLLUTANT_NAMES.get(code, code),
+                "Value": val.get("v", "N/A")
+            })
 
         # DISPLAY CARDS
         cols = st.columns(3)
@@ -89,7 +79,126 @@ def run():
 
         st.write("")
 
-        # ---------------------------------------------------------
+        import streamlit as st
+import requests
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from io import BytesIO
+
+def run():
+
+    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality – Tirupati</h2>", unsafe_allow_html=True)
+    st.markdown("<p class='subtitle'>Live AQI data from WAQI API</p>", unsafe_allow_html=True)
+
+    CITY = "tirupati"
+    TOKEN = "e15cda8309930fc97e17a9e977bd4153d57c5c1a"
+
+    url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
+
+    try:
+        # -------------------------------------------------------
+        # API CALL
+        # -------------------------------------------------------
+        response = requests.get(url, timeout=10)
+        data = response.json()
+
+        if data["status"] != "ok":
+            st.error("❌ AQI data unavailable. Try again later.")
+            return
+
+        aqi = data["data"]["aqi"]
+        dominent = data["data"].get("dominentpol", "N/A")
+        iaqi = data["data"].get("iaqi", {})
+
+        # MAIN AQI CARD
+        st.markdown(f"""
+            <div class='card'>
+                <h2>🌬 Current AQI: <span style='color:#00eaff'>{aqi}</span></h2>
+                <p>Dominant Pollutant: <b>{dominent.upper()}</b></p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        # -------------------------------------------------------
+        # POLLUTANTS
+        # -------------------------------------------------------
+        POLLUTANT_NAMES = {
+            "PM25": "Fine Particulate Matter (PM2.5)",
+            "PM10": "Coarse Particulate Matter (PM10)",
+            "O3": "Ozone (O3)",
+            "NO2": "Nitrogen Dioxide (NO2)",
+            "SO2": "Sulfur Dioxide (SO2)",
+            "CO": "Carbon Monoxide (CO)",
+            "T": "Temperature (T)",
+            "H": "Humidity (H)",
+            "P": "Air Pressure (P)",
+            "DEW": "Dew Point (DEW)",
+            "W": "Wind Speed (W)"
+        }
+
+        pollutants = []
+        for pol, val in iaqi.items():
+            code = pol.upper()
+            pollutants.append({
+                "FullName": POLLUTANT_NAMES.get(code, code),
+                "Value": val.get("v", "N/A")
+            })
+
+        cols = st.columns(3)
+        for i, item in enumerate(pollutants):
+            html = f"""
+                <div class='card' style="margin:25px; padding:25px; border-radius:20px;">
+                    <h4 style='font-size:20px;'>{item['FullName']}</h4>
+                    <p style='font-size:17px;'>Value: <b>{item['Value']}</b></p>
+                </div>
+            """
+            cols[i % 3].markdown(html, unsafe_allow_html=True)
+
+        # -------------------------------------------------------
+        # PDF CREATION
+        # -------------------------------------------------------
+        buffer = BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        styles = getSampleStyleSheet()
+
+        neon_title = ParagraphStyle(
+            'NeonTitle', parent=styles['Title'],
+            textColor=colors.HexColor("#00bfff"), fontSize=28, alignment=1
+        )
+
+        section_head = ParagraphStyle(
+            'SectionHead', parent=styles['Heading2'],
+            textColor=colors.HexColor("#0099ff"), fontSize=18
+        )
+
+        story = []
+        story.append(Paragraph("Quantum AQI Forecast – Tirupati", neon_title))
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph(f"<b>Current AQI:</b> <font color='#00aaff'>{aqi}</font>", section_head))
+        story.append(Paragraph(f"<b>Dominant Pollutant:</b> {dominent.upper()}", styles["Normal"]))
+        story.append(Spacer(1, 15))
+
+        story.append(Paragraph("<b>Pollutant Measurements</b>", section_head))
+        story.append(Spacer(1, 10))
+
+        table_data = [["Pollutant", "Value"]]
+        for item in pollutants:
+            table_data.append([item["FullName"], str(item["Value"])])
+
+        table = Table(table_data, colWidths=[260, 100])
+        table.setStyle(TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#00bfff")),
+            ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+            ("BACKGROUND", (0,1), (-1,-1), colors.HexColor("#e6f7ff")),
+            ("GRID", (0,0), (-1,-1), 0.5, colors.HexColor("#00bfff"))
+        ]))
+
+        story.append(table)
+        doc.build(story)
+        pdf_data = buffer.getvalue()
+# ---------------------------------------------------------
         # PREMIUM BLUE-NEON PDF
         # ---------------------------------------------------------
 
@@ -150,11 +259,11 @@ def run():
         doc.build(story)
         pdf_data = buffer.getvalue()
 
-        # PREMIUM NEON DOWNLOAD BUTTON
+        # PREMIUM NEON DOWNLOAD BUTTON CSS
         st.markdown("""
             <style>
                 .download-btn {
-                    background: linear-gradient(90deg, #00eaff, #008cff);
+                    background: linear-gradient(90deg, #87CEEB, #008cff);
                     padding: 12px 25px;
                     border-radius: 12px;
                     color: white !important;
@@ -172,14 +281,16 @@ def run():
             </style>
         """, unsafe_allow_html=True)
 
+        # DOWNLOAD BUTTON
         st.download_button(
             label="Download",
             data=pdf_data,
             file_name=f"{CITY}_AQI_Report.pdf",
             mime="application/pdf",
             help="Download the premium AQI Report",
-            key="premium_pdf",
+            key="premium_pdf"
         )
 
     except Exception as e:
         st.error(f"❌ Error fetching AQI: {str(e)}")
+
