@@ -51,7 +51,7 @@ if selected == "Home":
     page.run()
 
 elif selected == "RealTimeAQI":
-    import pages.RealTimeAQI as page
+    from pages.RealTimeAQI import run
     page.run()
 
 elif selected == "Forecasting":
