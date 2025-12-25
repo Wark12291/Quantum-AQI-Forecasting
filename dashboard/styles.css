@@ -27,13 +27,13 @@ header, footer {visibility: hidden;}
 
 @keyframes glowAnim {
     0% { text-shadow: 0 0 20px #00bfff; }
-    100% { text-shadow: 0 0 40px #00eaff; }
+    100% { text-shadow: 0 0 40px #dc143c; }
 }
 
 .subtitle {
     text-align: center;
     font-size: 20px;
-    color: #b3f2ff;
+    color: #dc143c;
     margin-top: -10px;
     opacity: 0.9;
 }
