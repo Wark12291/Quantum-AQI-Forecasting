@@ -34,9 +34,14 @@ header, footer {visibility: hidden;}
     text-align: center;
     font-size: 20px;
     color: #b3f2ff;
-    background: #000000;
     margin-top: -10px;
     opacity: 0.9;
+    text-shadow:
+       0px 0px 10px #000000,
+       0px 0px 20px #000000,
+       0px 0px 40px #000000,
+       0px 0px 60px #000000;
+    animation: glowAnim 3s infinite alternate;
 }
 
 
