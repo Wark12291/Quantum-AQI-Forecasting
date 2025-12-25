@@ -1,13 +1,18 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
+# -----------------------------------------------------
+# PAGE CONFIG MUST COME FIRST
+# -----------------------------------------------------
 st.set_page_config(
     page_title="Quantum AQI Forecasting – Neon Cyber Edition",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Load CSS
+# -----------------------------------------------------
+# LOAD CUSTOM CSS (AFTER page_config)
+# -----------------------------------------------------
 def load_css():
     try:
         with open("dashboard/styles.css") as f:
@@ -17,44 +22,50 @@ def load_css():
 
 load_css()
 
-# -------------------------------
-# CORRECT IMPORTS (VERY IMPORTANT)
-# -------------------------------
-from pages import Home
-from pages import RealTimeAQI
-from pages import Forecasting
-from pages import QuantumModule
-from pages import Heatmap
-from pages import AnomalyDetection
-
-# Header
+# -----------------------------------------------------
+# MAIN TITLE
+# -----------------------------------------------------
 st.markdown("<h1 class='title-glow'>🌌 Quantum AQI Forecasting – Neon Cyber Edition</h1>", unsafe_allow_html=True)
-st.markdown("<p class='subtitle'>AI + Quantum Hybrid Dashboard</p>", unsafe_allow_html=True)
+st.markdown("<p class='subtitle'>Advanced AI + Quantum Dashboard for Tirupati Air Quality Monitoring</p>", unsafe_allow_html=True)
 
-# Sidebar menu
+# -----------------------------------------------------
+# SIDEBAR MENU
+# -----------------------------------------------------
 with st.sidebar:
     selected = option_menu(
-        "⚡ Menu",
+        "⚡ Navigation",
         ["Home", "RealTimeAQI", "Forecasting", "QuantumModule", "Heatmap", "AnomalyDetection"],
         icons=["house", "cloud", "graph-up", "cpu", "map", "exclamation-triangle"],
         default_index=0,
+        styles={
+            "nav-link": {"--hover-color": "#00eaff"},
+            "icon": {"color": "#00eaff"},
+        }
     )
 
-# Routing
+# -----------------------------------------------------
+# PAGE ROUTING
+# -----------------------------------------------------
 if selected == "Home":
-    Home.run()
+    from pages import Home as page
+    page.run()
 
 elif selected == "RealTimeAQI":
-    RealTimeAQI.run()
+    from pages import RealTimeAQI as page
+    page.run()
 
 elif selected == "Forecasting":
-    Forecasting.run()
+    from pages import Forecasting as page
+    page.run()
 
 elif selected == "QuantumModule":
-    QuantumModule.run()
+    from pages import QuantumModule as page
+    page.run()
 
 elif selected == "Heatmap":
-    Heatmap.run()
+    from pages import Heatmap as page
+    page.run()
 
 elif selected == "AnomalyDetection":
-    AnomalyDetection.run()
+    from pages import AnomalyDetection as page
+    page.run()
