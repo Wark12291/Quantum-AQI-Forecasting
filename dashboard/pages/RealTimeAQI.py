@@ -121,26 +121,62 @@ def run():
         # -------------------------------------------------------
         # CSS + DOWNLOAD BUTTON
         # -------------------------------------------------------
-        st.markdown("""
-            <style>
-                .download-btn {
-                    background: linear-gradient(90deg, #00eaff, #008cff);
-                    padding: 12px 25px;
-                    border-radius: 12px;
-                    color: white !important;
-                    font-size: 18px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    box-shadow: 0px 0px 12px #00bfff;
-                    transition: 0.3s;
-                }
-                .download-btn:hover {
-                    box-shadow: 0px 0px 25px #00eaff;
-                    transform: scale(1.03);
-                }
-            </style>
-        """, unsafe_allow_html=True)
+st.markdown("<div class='download-btn-container'>", unsafe_allow_html=True)
 
+st.download_button(
+    label="📄 Download",
+    data=pdf_data,
+    file_name=f"{CITY}_AQI_Report.pdf",
+    mime="application/pdf",
+    key="premium_pdf",
+    help="Download your premium AQI report",
+    class_name="download-btn"
+)
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+
+st.markdown("""
+<style>
+
+.download-btn-container {
+    margin-top: 22px;
+    margin-bottom: 25px;
+}
+
+.download-btn > button {
+    background: linear-gradient(90deg, #00eaff, #0066ff);
+    color: white !important;
+    padding: 14px 32px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+
+    /* Glow + neon effect */
+    box-shadow: 0px 0px 18px #00c8ff, 
+                0px 0px 40px rgba(0, 200, 255, 0.5);
+
+    transition: all 0.25s ease-in-out;
+}
+
+.download-btn > button:hover {
+    transform: scale(1.06);
+    box-shadow: 0px 0px 28px #00eaff,
+                0px 0px 55px rgba(0, 200, 255, 0.8);
+}
+
+.download-btn > button:active {
+    transform: scale(0.97);
+    box-shadow: 0px 0px 12px #008cff;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+        
         st.download_button(
             label="📄 Download",
             data=pdf_data,
