@@ -18,7 +18,7 @@ header, footer {visibility: hidden;}
     text-align: center;
     color: #00eaff;
     text-shadow:
-        0px 0px 10px #dc143c,
+        0px 0px 10px #00eaff,
         0px 0px 20px #00bfff,
         0px 0px 40px #0066ff,
         0px 0px 60px #004dff;
@@ -27,13 +27,13 @@ header, footer {visibility: hidden;}
 
 @keyframes glowAnim {
     0% { text-shadow: 0 0 20px #00bfff; }
-    100% { text-shadow: 0 0 40px #dc143c; }
+    100% { text-shadow: 0 0 40px #00eaff; }
 }
 
 .subtitle {
     text-align: center;
     font-size: 20px;
-    color: #dc143c;
+    color: #b3f2ff;
     margin-top: -10px;
     opacity: 0.9;
 }
@@ -44,7 +44,7 @@ header, footer {visibility: hidden;}
 ------------------------------------------------------ */
 .css-1d391kg {
     background-color: #000000 !important;
-    color: #dc143c !important;
+    color: #00eaff !important;
 }
 
 .sidebar .sidebar-content {
@@ -79,7 +79,7 @@ header, footer {visibility: hidden;}
    CUSTOM BUTTONS
 ------------------------------------------------------ */
 .stButton>button {
-    background: linear-gradient(90deg, #0099ff, #dc143c);
+    background: linear-gradient(90deg, #0099ff, #00eaff);
     border-radius: 10px;
     color: #000;
     padding: 10px 20px;
@@ -90,7 +90,7 @@ header, footer {visibility: hidden;}
 }
 
 .stButton>button:hover {
-    background: linear-gradient(90deg, #dc143c, #0099ff);
+    background: linear-gradient(90deg, #00eaff, #0099ff);
     box-shadow: 0 0 18px #00eaff;
     transform: scale(1.05);
 }
@@ -101,7 +101,7 @@ header, footer {visibility: hidden;}
 ------------------------------------------------------ */
 .dataframe {
     border-radius: 12px;
-    border: 1px solid #dc143c;
+    border: 1px solid #00eaff;
     box-shadow: 0 0 15px #00bfff;
 }
 
@@ -111,7 +111,7 @@ header, footer {visibility: hidden;}
 ------------------------------------------------------ */
 .stSelectbox div, .stTextInput input {
     background: rgba(0, 128, 255, 0.1) !important;
-    border: 1px solid #dc143c !important;
+    border: 1px solid #00eaff !important;
     border-radius: 10px !important;
     color: #00eaff !important;
 }
