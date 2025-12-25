@@ -163,7 +163,7 @@ def run():
         """, unsafe_allow_html=True)
 
         st.download_button(
-            label="𝕯𝖔𝖜𝖓𝖑𝖔𝖆𝖉",
+            label="𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝",
             data=pdf_data,
             file_name=f"{CITY}_AQI_Report.pdf",
             mime="application/pdf",
