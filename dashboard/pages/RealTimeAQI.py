@@ -186,7 +186,7 @@ def run():
                     padding: 12px 25px;
                     border-radius: 12px;
                     color: white !important;
-                    font-size: 18px;
+                    font-size: 24px;
                     font-weight: bold;
                     border: none;
                     cursor: pointer;
