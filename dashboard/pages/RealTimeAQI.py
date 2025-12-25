@@ -26,7 +26,7 @@ def run():
 
         # MAIN AQI CARD
         st.markdown(f"""
-            <div class='card'>
+            <div class='card' style='margin-bottom:25px;'>
                 <h2>🌬 Current AQI: <span style='color:#00eaff'>{aqi}</span></h2>
                 <p>Dominant Pollutant: <b>{dominent.upper()}</b></p>
             </div>
@@ -34,10 +34,11 @@ def run():
 
         st.write("")
 
-        # POLLUTANT CARDS
+        # TITLE
         st.markdown("### 🌫️ Detailed Pollutant Cards")
-        st.write("")
+        st.write("<br>", unsafe_allow_html=True)
 
+        # POLLUTANT CARDS WITH BETTER SPACING
         pollutants = []
         for pol, val in iaqi.items():
             pollutants.append({"Pollutant": pol.upper(), "Value": val.get("v", "N/A")})
@@ -47,7 +48,7 @@ def run():
         for i, row in enumerate(pollutants):
 
             card_html = f"""
-                <div class='card'>
+                <div class='card' style='margin:15px; padding:20px; border-radius:15px;'>
                     <h4>{row['Pollutant']}</h4>
                     <p>Value: <b>{row['Value']}</b></p>
                 </div>
@@ -60,44 +61,58 @@ def run():
             else:
                 col3.markdown(card_html, unsafe_allow_html=True)
 
+        st.write("<br><br>", unsafe_allow_html=True)
+
         # -----------------------------------------------------
-        # PDF DOWNLOAD
+        # ENHANCED PDF DOWNLOAD
         # -----------------------------------------------------
         from reportlab.lib.pagesizes import letter
         from reportlab.pdfgen import canvas
+        from reportlab.lib import colors
         import io
 
         pdf_buffer = io.BytesIO()
         pdf = canvas.Canvas(pdf_buffer, pagesize=letter)
 
-        pdf.setFont("Helvetica-Bold", 16)
-        pdf.drawString(50, 750, f"AQI Report - {CITY}")
+        # HEADER BOX
+        pdf.setFillColorRGB(0.1, 0.1, 0.4)
+        pdf.rect(0, 740, 600, 50, stroke=0, fill=1)
+
+        pdf.setFillColor(colors.white)
+        pdf.setFont("Helvetica-Bold", 18)
+        pdf.drawString(20, 760, f"AQI REPORT – {CITY.upper()}")
+
+        # MAIN AQI SECTION
+        pdf.setFillColor(colors.black)
+        pdf.setFont("Helvetica-Bold", 14)
+        pdf.drawString(20, 720, f"Current AQI: {aqi}")
 
         pdf.setFont("Helvetica", 12)
-        pdf.drawString(50, 720, f"Current AQI: {aqi}")
-        pdf.drawString(50, 700, f"Dominant Pollutant: {dominent.upper()}")
+        pdf.drawString(20, 700, f"Dominant Pollutant: {dominent.upper()}")
 
+        # POLLUTANT SECTION
         pdf.setFont("Helvetica-Bold", 14)
-        pdf.drawString(50, 670, "Pollutant Levels:")
+        pdf.drawString(20, 670, "Pollutant Levels:")
 
         y = 650
         pdf.setFont("Helvetica", 12)
         for p in pollutants:
-            pdf.drawString(60, y, f"{p['Pollutant']}: {p['Value']}")
+            pdf.drawString(40, y, f"- {p['Pollutant']}: {p['Value']}")
             y -= 20
-            if y < 50:
+            if y < 40:
                 pdf.showPage()
-                pdf.setFont("Helvetica", 12)
                 y = 750
 
         pdf.save()
         pdf_buffer.seek(0)
 
+        # Stylish Download Button
         st.download_button(
-            label="📥 Download AQI Report (PDF)",
+            label="⬇️ Download",
             data=pdf_buffer,
             file_name=f"{CITY}_AQI_Report.pdf",
-            mime="application/pdf"
+            mime="application/pdf",
+            help="Click to download AQI report"
         )
 
     except Exception as e:
