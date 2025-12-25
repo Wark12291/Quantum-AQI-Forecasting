@@ -1,0 +1,1 @@
+print('Quantum AQI Advanced Project Ready')
