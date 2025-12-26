@@ -3,10 +3,6 @@ pandas
 numpy
 requests
 matplotlib
-reportlab
 streamlit-option-menu==0.3.2
 streamlit-folium
 folium
-statsmodels==0.13.5
-qiskit==0.45.0
-
