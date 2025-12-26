@@ -12,7 +12,7 @@ def run():
     st.markdown("<p class='subtitle'>Live AQI data from WAQI API</p>", unsafe_allow_html=True)
 
     CITY = "Tirupati"
-    TOKEN = "e15cda8309930fc97e17a9e977bd4153d57c5c1a"
+    TOKEN = "demo"
 
     url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
 
@@ -45,9 +45,9 @@ def run():
         POLLUTANT_NAMES = {
             "PM25": "Fine Particulate Matter (PM2.5)",
             "PM10": "Coarse Particulate Matter (PM10)",
-            "O3": "Ozone (O3)",
-            "NO2": "Nitrogen Dioxide (NO2)",
-            "SO2": "Sulfur Dioxide (SO2)",
+            "O3": "Ozone (O₃)",
+            "NO2": "Nitrogen Dioxide (NO₂)",
+            "SO2": "Sulfur Dioxide (SO₂)",
             "CO": "Carbon Monoxide (CO)",
             "T": "Temperature (T)",
             "H": "Humidity (H)",
