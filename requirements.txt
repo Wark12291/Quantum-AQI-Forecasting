@@ -1,8 +1,10 @@
-streamlit==1.31.1
+streamlit
 pandas
 numpy
+qiskit
 requests
-matplotlib
-streamlit-option-menu==0.3.2
-streamlit-folium
 folium
+streamlit-folium
+streamlit-option-menu==0.3.2
+reportlab
+matplotlib
