@@ -34,8 +34,8 @@ st.markdown("<p class='subtitle'>Advanced AI + Quantum Dashboard for Air Quality
 with st.sidebar:
     selected = option_menu(
         "⚡ Navigation",
-        ["Home", "RealTimeAQI", "Forecasting", "QuantumModule", "Heatmap", "AnomalyDetection"],
-        icons=["house", "cloud", "graph-up", "cpu", "map", "exclamation-triangle"],
+        ["Home", "RealTimeAQI", "Forecasting", "QuantumModule", "Heatmap", "AnomalyDetection","IndiaAQI"],
+        icons=["house", "cloud", "graph-up", "cpu", "map", "exclamation-triangle",""],
         default_index=0,
         styles={
             "nav-link": {"--hover-color": "#00eaff"},
