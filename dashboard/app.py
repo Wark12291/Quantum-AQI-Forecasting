@@ -69,3 +69,7 @@ elif selected == "Heatmap":
 elif selected == "AnomalyDetection":
     from pages import AnomalyDetection as page
     page.run()
+
+elif selected == "IndiaAQI":
+    from pages import IndiaAQI as page
+    page.run()
