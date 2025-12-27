@@ -8,10 +8,10 @@ from io import BytesIO
 
 def run():
 
-    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality – Tirupati</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='title-glow'>📡 Real-Time Air Quality</h2>", unsafe_allow_html=True)
     st.markdown("<p class='subtitle'>Live AQI data from WAQI API</p>", unsafe_allow_html=True)
 
-    CITY = "tirupati"
+    CITY = "IndiaAQI.py"
     TOKEN = "e15cda8309930fc97e17a9e977bd4153d57c5c1a"
 
     url = f"https://api.waqi.info/feed/{CITY}/?token={TOKEN}"
@@ -105,7 +105,7 @@ def run():
         story = []
 
         # Title
-        story.append(Paragraph("Quantum AQI Forecast – Tirupati", neon_title))
+        story.append(Paragraph("Quantum AQI Forecast", neon_title))
         story.append(Spacer(1, 20))
 
         # AQI Section
