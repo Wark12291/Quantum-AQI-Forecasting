@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 
-TOKEN = "YOUR_API_KEY_HERE"
+TOKEN = "e15cda8309930fc97e17a9e977bd4153d57c5c1a"
 
 # Top major cities of India
 CITIES = [
