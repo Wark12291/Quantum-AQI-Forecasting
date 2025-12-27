@@ -8,7 +8,7 @@ def run():
 
     # Subtitle
     st.markdown(
-        "<p class='subtitle'>AI + Quantum Powered Air Quality Monitoring for Tirupati, Andhra Pradesh</p>",
+        "<p class='subtitle'>AI + Quantum Powered Air Quality Monitoring</p>",
         unsafe_allow_html=True
     )
 
@@ -55,8 +55,8 @@ def run():
         <div class='card'>
             <h3>✨ Dashboard Highlights</h3>
             <ul>
-                <li>🌬 Live AQI Levels for Tirupati</li>
-                <li>📉 Forecast for next 10 hours (AI model simulated)</li>
+                <li>🌬 Live AQI Levels</li>
+                <li>📉 Forecast for next 24 hours (AI model simulated)</li>
                 <li>🗺 Heatmap of surrounding region</li>
                 <li>🚨 Anomaly Detection module (sudden spikes detection)</li>
                 <li>⚛ Quantum Variational Circuit visualizer</li>
