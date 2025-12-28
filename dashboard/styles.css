@@ -73,6 +73,16 @@ header, footer {visibility: hidden;}
     transition: 0.35s ease-in-out;
 }
 
+.card {
+    background: rgba(20, 25, 40, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 15px #00eaff55;
+    text-align: center;
+    backdrop-filter: blur(5px);
+}
+
 .card:hover {
     transform: scale(1.03);
     box-shadow:
